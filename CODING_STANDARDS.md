@@ -11,8 +11,8 @@
 | --- | --- | --- | --- |
 | 语言/运行时 | Python | **3.11**（uv 管理，`.venv`） | 3.12+ 禁用 |
 | 工作流 | langgraph | 1.2.19 | interrupt/Checkpointer 核心，升级需跑全量场景回归 |
-| LLM 接入 | openai | 3.42.0 | 通义千问/DeepSeek 统一走 OpenAI 兼容协议；**禁止**引入 dashscope 或厂商深度绑定 |
-| 向量库 | chromadb | 1.5.9 | 仅经 `storage/` 适配层访问 |
+| LLM 接入 | openai | 3.42.0 | 通义千问/DeepSeek 统一走 OpenAI 兼容协议；**禁止**引入 dashscope 或厂商深度绑定；业务代码零 openai import，统一经 `infra/llm.py`（ADR-0005） |
+| 向量库 | chromadb | 1.5.9 | 仅经 `infra/` 适配层访问（ADR-0005） |
 | 嵌入 | sentence-transformers | 6.2.0 | 模型固定 bge-small-zh-v1.5 |
 | Web 服务 | fastapi | 0.162.0 | 模拟业务系统与演示 Web |
 | HTTP 客户端 | httpx | 0.28.1 | 工具调用统一用 httpx，**禁止 requests** |
@@ -30,13 +30,13 @@ AI 不得私自 `pip install` 并 import 未约定的包。pip 源：清华镜�
 以 DESIGN.md §6 目录结构为准。依赖方向强制单向：
 
 ```
-access → workflow → tools / rag → storage
+access → workflow → tools / rag → infra
 governance（横切，经接口注入，不反向依赖业务）
 mock/（独立进程，不 import src/opsagent 业务代码）
 tests/（目录结构镜像 src/）
 ```
 
-- 禁止跨层直连：workflow 不许直接 `import chromadb`，必须经 storage 适配层
+- 禁止跨层直连：workflow 不许直接 `import chromadb`，必须经 infra 适配层；业务代码不许直接 `import openai`，必须经 `infra/llm.py`
 - 模块内禁止循环导入；公共接口放 `__init__.py` 或 `interfaces.py`
 
 ---
@@ -87,7 +87,7 @@ alert / ticket / incident / evidence / hypothesis / root_cause / remediation / r
 | GOV 治理 | 5xxx | GOV-5001 预算熔断 |
 | RAG | 6xxx | RAG-6001 知识库无命中 |
 | ACC 接入层 | 7xxx | ACC-7001 告警格式非法 |
-| STG 存储 | 8xxx | STG-8001 checkpoint 写入失败 |
+| INF 基础设施 | 8xxx | INF-8001 checkpoint 写入失败 |
 
 ### 5.2 分层策略
 
