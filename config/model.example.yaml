@@ -1,0 +1,33 @@
+# OpsAgent 配置模板 —— 复制为 config/model.yaml 并填入真实值
+# model.yaml 已被 gitignore；严禁将真实 api_key 提交到仓库或写入日志
+# 优先级：环境变量（OPSAGENT_MODEL__API_KEY 等）> 本文件 > 代码默认值
+
+model:
+  provider: deepseek          # deepseek / dashscope(通义) / fake（本地脚本响应，联调免 key）
+  base_url: https://api.deepseek.com
+  api_key: "<在此填入 DeepSeek API Key>"
+  model_fast: deepseek-chat   # fast tier：提取/摘要类；P1 与 deep 同模型（reasoner 不支持 function calling）
+  model_deep: deepseek-chat   # deep tier：诊断推理（需支持 function calling）
+  timeout_seconds: 60
+  max_retries: 2
+  temperature: 0.2
+
+tools:
+  timeout_seconds: 5          # 工具调用模拟服务的 HTTP 超时
+  max_retries: 2              # 传输层指数退避重试上限
+
+workflow:
+  max_rounds: 15              # 三重终止之一：轮次上限
+  no_progress_limit: 2        # 无进展判定阈值
+  token_budget_default: 8000  # 默认单任务 token 预算（场景 YAML 可覆盖）
+
+mock:
+  host: 127.0.0.1
+  monitor_port: 8101
+  logs_port: 8102
+  cmdb_port: 8103
+  ticket_port: 8104
+
+data_dir: data
+logs_dir: logs
+log_level: INFO

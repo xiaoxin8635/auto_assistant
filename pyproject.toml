@@ -1,0 +1,22 @@
+# OpsAgent 打包配置：仅定义包元数据与可编辑安装；运行依赖统一由 requirements.txt 管理（CODING_STANDARDS §1）
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opsagent"
+version = "0.1.0"
+description = "OpsAgent — IT 运维工单智能处理 Agent 系统"
+requires-python = ">=3.11,<3.12"
+dependencies = []
+
+[project.scripts]
+opsagent = "opsagent.access.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools.packages.find]
+where = ["src", "."]
+include = ["opsagent*", "mock*"]

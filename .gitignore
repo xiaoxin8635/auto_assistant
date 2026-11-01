@@ -10,7 +10,9 @@ venv/
 .env.*
 
 # 配置文件（可能含 API Key 等敏感信息，仅允许 *.example 模板入库）
-config/
+# 注意：父目录整目录忽略（config/）会使 !重包含规则失效，必须用 config/*
+config/*
+!config/model.example.yaml
 *.local.yaml
 *.local.json
 *.secret.yaml

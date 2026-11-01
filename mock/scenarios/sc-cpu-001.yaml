@@ -1,0 +1,32 @@
+# SC-CPU-001：日志采集进程失控导致 CPU 过载（P1 唯一场景，结构见 DESIGN.md §5.2.3）
+scenario_id: SC-CPU-001
+title: 日志采集进程失控导致 CPU 过载
+difficulty: normal
+fault:
+  type: cpu_overload
+  host: host-web-01
+  service: log-agent
+  metric_effect:
+    cpu: "92~97"
+    memory: "55~60"
+  log_signature: "log-agent[rotation] stuck in disk retry loop"
+pre_condition:            # 注入前正常基线（修复后对照）
+  cpu: "15~30"
+  memory: "40~55"
+pre_inject_logs: 2        # 注入前先产生 2 条正常心跳日志，避免"一查即中"
+fix_options:
+  - action: restart_service                     # 正确修复
+    params: { host_id: host-web-01, service_name: log-agent }
+    effect: recovered
+  - action: config_change                       # 部分缓解：CPU 下降但未达恢复条件
+    params: { host_id: host-web-01, service_name: log-agent, key: rotate_interval, value: 300 }
+    effect: mitigated
+    partial_metric_effect:
+      cpu: "80~84"
+recovery_check:
+  - { metric: cpu, op: "<", value: 80, window: 2m }
+  - { metric: service_status, op: "==", value: running, window: 2m }
+knowledge_hints:          # P2 知识库语料对齐提示
+  - "CPU 过载排查手册"
+  - "log-agent 已知缺陷案例"
+token_budget: 8000

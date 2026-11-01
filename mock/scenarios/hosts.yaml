@@ -1,0 +1,12 @@
+# 模拟主机资产档案（CMDB 内存版数据源）
+hosts:
+  - host_id: host-web-01
+    ip: 10.0.1.11
+    os: Ubuntu 22.04
+    service: log-agent
+    owner: ops-team-a
+  - host_id: host-db-01
+    ip: 10.0.2.21
+    os: Ubuntu 22.04
+    service: mysql
+    owner: ops-team-b

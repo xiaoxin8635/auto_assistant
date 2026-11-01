@@ -1,0 +1,9 @@
+{
+  "alert_id": "AL-20261101-001",
+  "host_id": "host-web-01",
+  "service": "log-agent",
+  "metric": "cpu",
+  "value": 95.5,
+  "severity": "critical",
+  "summary": "CPU 利用率持续超过 90%，触发主机过载告警"
+}
