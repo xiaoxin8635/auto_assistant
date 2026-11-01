@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 环境变量与密钥
+.env
+.env.*
+
+# 日志
+logs/
+*.log
+
+# 运行时数据（向量库、数据库文件）
+data/chroma/
+*.sqlite3
+*.db
+
+# IDE
+.idea/
+.vscode/
+
+# Claude 本地私有配置
+.claude/settings.local.json
