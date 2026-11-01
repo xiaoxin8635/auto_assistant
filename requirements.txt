@@ -1,0 +1,28 @@
+# OpsAgent 依赖清单
+# 安装：uv pip install -r requirements.txt
+# 锁定版本：requirements-lock.txt（pip freeze 生成，环境复现用）
+
+# ===== 工作流 =====
+langgraph
+
+# ===== LLM（通义千问 / DeepSeek 均走 OpenAI 兼容协议）=====
+openai
+
+# ===== RAG =====
+chromadb
+sentence-transformers   # bge-small-zh-v1.5 本地嵌入
+rank-bm25               # BM25 混合检索
+
+# ===== 模拟业务系统 / 接入层 =====
+fastapi
+uvicorn
+httpx
+
+# ===== 基础 =====
+pydantic
+pydantic-settings
+pyyaml
+python-dotenv
+
+# ===== 测试 =====
+pytest
