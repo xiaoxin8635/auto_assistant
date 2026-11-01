@@ -9,6 +9,15 @@ venv/
 .env
 .env.*
 
+# 配置文件（可能含 API Key 等敏感信息，仅允许 *.example 模板入库）
+config/
+*.local.yaml
+*.local.json
+*.secret.yaml
+
+# 本地文档：设计文档、ADR 等仅保留本地，不上传
+docs/
+
 # 日志
 logs/
 *.log
